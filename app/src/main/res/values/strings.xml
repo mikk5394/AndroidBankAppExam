@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">bankappexam</string>
+
+    <string name="login_username">Email</string>
+    <string name="login_password">Password</string>
+    <string name="signup_age">Age</string>
+    <string name="signup_name">Name</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign up</string>
+    <string name="menu">KEA Bank</string>
+    <string name="logout">Logout</string>
+    <string name="go_back">Go back</string>
+    <string name="go_bus">Go Business</string>
+    <string name="slash">/</string>
+    <string name="default_account">Default Account</string>
+    <string name="budget_account">Budget Account</string>
+    <string name="pension_account">Pension Account</string>
+    <string name="savings_account">Savings Account</string>
+    <string name="business_account">Business Account</string>
+    <string name="saldo">Saldo</string>
+    <string name="deposit">Deposit</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="send">Send</string>
+    <string name="logout_message">Logging out</string>
+    <string name="login_message">Logging in</string>
+    <string name="loginWrongUsername">Wrong username credentials</string>
+    <string name="loginWrongPassword">Wrong password credentials</string>
+    <string name="loginWrongCredentials">Wrong login credentials</string>
+    <string name="loginNoInput">Please enter login credentials</string>
+    <string name="space">&#160;</string>
+</resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "878000094503",
+    "firebase_url": "https://bankappexam.firebaseio.com",
+    "project_id": "bankappexam",
+    "storage_bucket": "bankappexam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878000094503:android:e3661ecde9935ac1",
+        "android_client_info": {
+          "package_name": "com.example.bankappexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878000094503-vhs04r3uos0n1aqg7mtb7o4le6dhkfll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bankappexam",
+            "certificate_hash": "0a1d6c76fd988863773711e51f921839de7ba084"
+          }
+        },
+        {
+          "client_id": "878000094503-49bha2opnhv9qva3cs08nv23h0104vm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_ohLcVLvWlmsTHnd7I5hQeNt8V2eXRQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878000094503-49bha2opnhv9qva3cs08nv23h0104vm3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
