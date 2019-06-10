@@ -27,9 +27,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseAuth firebaseAuth;
 
-    private int accountBalance;
+    private int accountBalance, age;
     private String accountType;
     private String uid, recipientUid;
+    private Boolean running = true;
 
     private static final String TAG = "LOG!!!!!!!";
 
@@ -110,14 +111,27 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     public void withdraw(){
         int amount = Integer.parseInt(ediTextAmount.getText().toString().trim());
 
-        if(accountBalance - amount >= 0){
-            accountBalance = accountBalance - amount;
-            FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(uid).child("balance").setValue(accountBalance);
-            Toast.makeText(this, "Money Withdrawn", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "You can't overdaw!", Toast.LENGTH_SHORT).show();
+        if(accountType == "Pension" && age >= 77){
+            if(accountBalance - amount >= 0){
+                accountBalance = accountBalance - amount;
+                FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(uid).child("balance").setValue(accountBalance);
+                Toast.makeText(this, "Money Withdrawn", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "You can't overdaw!", Toast.LENGTH_SHORT).show();
+            }
+        } else if (accountType != "Pension") {
+            if (accountBalance - amount >= 0) {
+                accountBalance = accountBalance - amount;
+                FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(uid).child("balance").setValue(accountBalance);
+                Toast.makeText(this, "Money Withdrawn", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "You can't overdaw!", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this, "You're not old enough to withdraw from your pension account", Toast.LENGTH_LONG).show();
         }
     }
+
 
     public void sendTo(){
 
@@ -133,24 +147,24 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             return;
         }
 
-        //If it's gotten this far, it theres data in the editText (the editText can only contain numbers)
+        //If it has gotten this far, there's data in the editText (the editText can only contain numbers)
         final int amount = Integer.parseInt(amountHolder);
 
         //Looping through every user in the DB and checking if the typed email belong to any of the users in the DB
         FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
 
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
                     //If typed email matches a user in the db (emails are unique due to firebaseAuthentication), continue
                     if(user.getEmail().equals(receiverEmail)){
 
+                        //Recipients uid is needed so I can fetch his balance
                         recipientUid = snapshot.getKey();
-
                         if(accountBalance - amount >= 0 && uid != snapshot.getKey()){
                             //I have to fetch our the balance of the user i'm sending money to so I can add the amount to his balance
-                            FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(snapshot.getKey()).child("balance").addValueEventListener(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(snapshot.getKey()).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     int balanceOfReceiver = Integer.parseInt(dataSnapshot.getValue().toString());
@@ -161,19 +175,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                     //And the recipients balance is updated
                                     FirebaseDatabase.getInstance().getReference("Accounts/" + accountType).child(recipientUid).child("balance").setValue(updatedBalance);
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });
-                            break;
-
                         } else {
                             Toast.makeText(getApplicationContext(), "You can't overdraw or send money to yourself", Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "No account with that email found", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -183,8 +192,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-
-
     }
 
     @Override

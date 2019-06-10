@@ -31,8 +31,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     private Account savings = new Account("Savings");
     private Account business = new Account("Business");
 
-    private String name;
+    private String name, uid;
     private int age;
+    private boolean hasBusiness = false;
 
     private FirebaseAuth firebaseAuth;
 
@@ -51,6 +52,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        uid = user.getUid();
 
         welcome = findViewById(R.id.welcome);
 
@@ -65,6 +67,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 pension.setAccountHolder(name);
                 savings.setAccountHolder(name);
                 business.setAccountHolder(name);
+                checkIfBusiness();
             }
 
             @Override
@@ -76,7 +79,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         init();
 
     }
-
 
     public void init() {
 
@@ -106,28 +108,25 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         btnGoBusiness.setOnClickListener(this);
     }
 
-
-    public void logout(View view) {
+    public void logout() {
         Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show();
         firebaseAuth.signOut();
         finish();
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    public void goBusiness(View view) {
-        //Has to check if the specific user using the app at that moment, has a business account or not. To do that i need the uid.
-        final String uid = firebaseAuth.getCurrentUser().getUid();
+    public void goBusiness() {
+
         //Checks if the user already has a business account or not - if not, an account is created for him
         FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild("Accounts/Business/" + uid)){
                     Log.d(TAG, "HAR IKKE BUSINESS");
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    business.setAccountType("Business");
                     business.setAccountHolder(name);
-                    FirebaseDatabase.getInstance().getReference("Accounts/Business").child(user.getUid()).setValue(business);
+                    FirebaseDatabase.getInstance().getReference("Accounts/Business").child(uid).setValue(business);
                     Toast.makeText(getApplicationContext(), "Business account created", Toast.LENGTH_LONG).show();
+                    hasBusiness = true;
                 } else {
                     Log.d(TAG, "HAR BUSINESS");
                     Toast.makeText(getApplicationContext(), "You already have a business account", Toast.LENGTH_LONG).show();
@@ -141,17 +140,39 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    public void checkIfBusiness() {
+
+        FirebaseDatabase.getInstance().getReference("Accounts/Business/" + uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    hasBusiness = true;
+                } else {
+                    hasBusiness = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     @Override
     public void onClick (View view){
         if (view == btnLogout) {
-             logout(view);
+             logout();
         }
         if (view == btnGoBusiness) {
-             goBusiness(view);
+             goBusiness();
          }
          if (view == btnDefault){
-
+             finish();
+             Intent i = new Intent(this, AccountActivity.class);
+             i.putExtra("account obj", defaultAcc);
+             startActivity(i);
         }
          if (view == btnBudget){
              finish();
@@ -162,13 +183,26 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
              startActivity(i);
          }
         if (view == btnPension){
-
+            finish();
+            Intent i = new Intent(this, AccountActivity.class);
+            i.putExtra("account obj", pension);
+            startActivity(i);
         }
         if (view == btnSavings){
-
+            finish();
+            Intent i = new Intent(this, AccountActivity.class);
+            i.putExtra("account obj", savings);
+            startActivity(i);
         }
         if (view == btnBusiness){
-
+            if(hasBusiness){
+                finish();
+                Intent i = new Intent(this, AccountActivity.class);
+                i.putExtra("account obj", business);
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "You do not have a business account", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
