@@ -1,7 +1,7 @@
 Examproject for Android App, KEA
 
 My take on the bank app assignment for the exam.
-The app contains all the must-have requirements. 
+The app contains almost the must-have requirements (being able to pay bills manually is missing). 
 I've used Firebase as my data storage and I've used their Authentication system aswell.
 
 Must-have requirements:
@@ -14,7 +14,7 @@ Restore Activity state change - check
 
 Being able to transfer money between own and other accounts - Did this using firebase
 
-Pay bills manually and automatically - 
+Pay bills manually and automatically - Last part is implemented
 
 Reset password - Used the firebaseAuth.sendPasswordRestEmail method for this
 
