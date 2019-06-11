@@ -6,6 +6,9 @@ I've used Firebase as my data storage and I've used their Authentication system 
 
 
 Must-have requirements:
+
+
+
 User-friendly design (not just the basics) - check
 At least two activities - check
 Restore Activity state change - check
