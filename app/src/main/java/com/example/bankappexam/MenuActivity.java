@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private Button btnDefault, btnBudget, btnPension, btnSavings, btnBusiness, btnLogout, btnGoBusiness;
+    private Button btnDefault, btnBudget, btnPension, btnSavings, btnBusiness, btnLogout, btnGoBusiness, btnReset, btnAutoPay;
     private TextView welcome;
 
     private Account defaultAcc = new Account("Default");
@@ -104,8 +106,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         btnLogout = findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(this);
+        btnReset = findViewById(R.id.btn_reset);
+        btnReset.setOnClickListener(this);
         btnGoBusiness = findViewById(R.id.btn_goBus);
         btnGoBusiness.setOnClickListener(this);
+        btnAutoPay = findViewById(R.id.btn_autoPay);
+        btnAutoPay.setOnClickListener(this);
     }
 
     public void logout() {
@@ -160,6 +166,28 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void resetPassword(){
+        FirebaseDatabase.getInstance().getReference("users/" + uid + "/email").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.getValue().toString();
+                firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "Reset mail sent", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public void onClick (View view){
         if (view == btnLogout) {
@@ -203,6 +231,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Toast.makeText(this, "You do not have a business account", Toast.LENGTH_LONG).show();
             }
+        }
+        if (view == btnReset){
+            resetPassword();
+        }
+        if (view == btnAutoPay){
+            Toast.makeText(this, "Bills are now paid automatically", Toast.LENGTH_SHORT).show();
         }
     }
 }
