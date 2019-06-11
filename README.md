@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
+My take on the bank app assignment for the exam.
+The app contains all the must-have requirements. 
 
-COMING
-=======
->>>>>>> Stashed changes
+I've used Firebase as my data storage and I've used their Authentication system aswell.
