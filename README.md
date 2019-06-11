@@ -16,7 +16,7 @@ Being able to transfer money between own and other accounts - Did this using fir
 
 Pay bills manually and automatically - 
 
-Reset password - Used 
+Reset password - Used the firebaseAuth.sendPasswordRestEmail method for this
 
 Register and login - Used the firebase authentication system
 
