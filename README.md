@@ -1,4 +1,4 @@
-Examproject for Android App, KEA
+Examproject for Android App, KEA, Mikkel Olsen
 
 My take on the bank app assignment for the exam.
 The app contains almost the must-have requirements (being able to pay bills manually is missing). 
@@ -33,5 +33,3 @@ from the MenuActivity class to the AccountActivity class everytime a user clicks
 
 Implement a new feature in the app (not been taught by me in during class) - Spent a lot of time learning the features of firebase. I've implemented some I'll show at the exam.
 
-
-Made by Mikkel Olsen	
