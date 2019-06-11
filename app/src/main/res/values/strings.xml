@@ -9,8 +9,10 @@
     <string name="signup">Sign up</string>
     <string name="menu">KEA Bank</string>
     <string name="logout">Logout</string>
+    <string name="reset">Reset</string>
     <string name="go_back">Go back</string>
     <string name="go_bus">Go Business</string>
+    <string name="autopay">Autopay Bills</string>
     <string name="slash">/</string>
     <string name="default_account">Default Account</string>
     <string name="budget_account">Budget Account</string>
